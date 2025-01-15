@@ -8,17 +8,43 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var recipes: [Recipe] = []
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if self.recipes.isEmpty {
+                RecipesUnavailableView()
+            } else {
+                List {
+                    ForEach(self.recipes, id: \.uuid) { recipe in
+                        RecipeCell(recipe: recipe)
+                    }
+                }
+                .listStyle(.plain)
+            }
         }
-        .padding()
+        .onAppear {
+            Task {
+                let recipes = try await NetworkManager.shared.getRecipes()
+                self.recipes = recipes
+                print("Recipes: \(recipes.count)")
+            }
+        }
     }
 }
 
 #Preview {
     ContentView()
+}
+
+
+// MARK: Private custom Views
+struct RecipesUnavailableView: View {
+    
+    var body: some View {
+        VStack {
+            ContentUnavailableView("No recipes found", systemImage: "text.page.badge.magnifyingglass")
+        }
+    }
 }
