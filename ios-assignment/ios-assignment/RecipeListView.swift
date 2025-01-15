@@ -7,22 +7,25 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct RecipeListView: View {
     
     @State private var recipes: [Recipe] = []
     
     var body: some View {
-        VStack {
-            if self.recipes.isEmpty {
-                RecipesUnavailableView()
-            } else {
-                List {
-                    ForEach(self.recipes, id: \.uuid) { recipe in
-                        RecipeCell(recipe: recipe)
+         NavigationView {
+            VStack {
+                if self.recipes.isEmpty {
+                    RecipesUnavailableView()
+                } else {
+                    List {
+                        ForEach(self.recipes, id: \.uuid) { recipe in
+                            RecipeCell(recipe: recipe)
+                        }
                     }
+                    .listStyle(.plain)
                 }
-                .listStyle(.plain)
             }
+            .navigationTitle(Text("Recipes"))
         }
         .onAppear {
             Task {
@@ -35,7 +38,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    RecipeListView()
 }
 
 

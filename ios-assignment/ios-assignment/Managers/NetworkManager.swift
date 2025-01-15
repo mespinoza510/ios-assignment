@@ -28,13 +28,7 @@ class NetworkManager {
             throw AppError.invalidResponse
         }
         
-        do {
-            let recipesResponse = try self.decoder.decode(RecipesResponse.self, from: data)
-            print("Recipes from network call: \(recipesResponse)")
-            return recipesResponse.recipes
-        } catch {
-            print("Decode error: \(error)")
-            throw AppError.invalidResponse
-        }
+        let recipesResponse = try self.decoder.decode(RecipesResponse.self, from: data)
+        return recipesResponse.recipes
     }
 }
