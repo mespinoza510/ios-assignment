@@ -44,9 +44,9 @@ enum AppError: Error, Identifiable {
         case .invalidURL:
             return Text("Please enter a valid URL")
         case .invalidResponse:
-            return Text("Please try again later")
+            return Text("There is an error in the response. Please check your URL")
         case .decodingError:
-            return Text("Please try again later")
+            return Text("There is a mismatch found from model. Please check your JSON")
         }
     }
     
