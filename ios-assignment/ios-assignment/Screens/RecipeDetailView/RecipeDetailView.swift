@@ -9,24 +9,25 @@ import SwiftUI
 
 struct RecipeDetailView: View {
     
-    let recipe: Recipe
+    @StateObject var viewModel: RecipeDetailViewModel
     
     var body: some View {
         VStack {
-            if let photoUrlLarge = self.recipe.photoUrlLarge {
+            if let photoUrlLarge = self.viewModel.recipe.photoUrlLarge {
                 RecipeBannerView(image: photoUrlLarge)
             }
             
-            Text("Cuisine: \(self.recipe.cuisine)")
+            Text("Cuisine: \(self.viewModel.recipe.cuisine)")
                 .lineLimit(1)
                 .font(.headline)
+                .foregroundStyle(.secondary)
             
             Text("Resources for recipe")
                 .font(.title2)
                 .lineLimit(1)
                 .padding(.top)
             
-            if let sourceUrl = recipe.sourceUrl, let youtubeUrl = self.recipe.youtubeUrl {
+            if let sourceUrl = self.viewModel.recipe.sourceUrl, let youtubeUrl = self.viewModel.recipe.youtubeUrl {
                 HStack {
                     RecipeLinkView(url: sourceUrl, icon: "network", color: .green, accessibilityLabel: "Recipe Source")
                     
@@ -36,14 +37,14 @@ struct RecipeDetailView: View {
             
             Spacer()
         }
-        .navigationTitle(self.recipe.name)
+        .navigationTitle(self.viewModel.recipe.name)
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
     NavigationView {
-        RecipeDetailView(recipe: MockData.recipe)
+        RecipeDetailView(viewModel: RecipeDetailViewModel(recipe: MockData.recipe))
     }
 }
 
