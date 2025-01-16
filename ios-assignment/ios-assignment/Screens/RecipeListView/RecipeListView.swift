@@ -14,7 +14,9 @@ struct RecipeListView: View {
     var body: some View {
          NavigationView {
             VStack {
-                if self.viewModel.recipes.isEmpty {
+                if self.viewModel.isLoading {
+                    ProgressView("Loading...")
+                } else if self.viewModel.recipes.isEmpty {
                     RecipesUnavailableView()
                 } else {
                     List {
@@ -27,9 +29,8 @@ struct RecipeListView: View {
             }
             .navigationTitle(Text("Recipes"))
         }
-        .task {
-                await self.viewModel.fetchRecipes()
-        }
+         .alert(item: self.$viewModel.alertContext.alertType) { $0.alertItem.alert }
+        .task { await self.viewModel.fetchRecipes() }
     }
 }
 

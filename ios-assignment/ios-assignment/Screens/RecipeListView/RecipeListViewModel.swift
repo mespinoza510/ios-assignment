@@ -11,6 +11,7 @@ import SwiftUI
 @MainActor
 final class RecipeListViewModel: ObservableObject {
     
+    @Published var alertContext = AlertContext()
     @Published var isLoading: Bool = false
     @Published var recipes: [Recipe] = []
     
@@ -20,8 +21,12 @@ final class RecipeListViewModel: ObservableObject {
         do {
             self.recipes = try await NetworkManager.shared.getRecipes()
             self.hideLoadingView()
+        } catch let error as AppError {
+            self.hideLoadingView()
+            self.alertContext.showAlert(error)
         } catch {
-            // handle error
+            self.hideLoadingView()
+            self.alertContext.showAlert(.decodingError)
         }
     }
     

@@ -54,7 +54,7 @@ enum AppError: Error, Identifiable {
         .default(Text("OK"))
     }
     
-    var alert: AlertItem {
+    var alertItem: AlertItem {
         return AlertItem(
             title: self.title,
             message: self.message,
