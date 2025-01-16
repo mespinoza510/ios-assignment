@@ -33,6 +33,9 @@ struct RecipeDetailView: View {
                     
                     RecipeLinkView(url: youtubeUrl, icon: "play.fill", color: .red, accessibilityLabel: "Youtube Video")
                 }
+                .padding(EdgeInsets(top: 10.0, leading: 20.0, bottom: 10.0, trailing: 20.0))
+                .background(Color(.secondarySystemBackground))
+                .clipShape(.capsule)
             }
             
             Spacer()
@@ -81,17 +84,19 @@ fileprivate struct RecipeLinkView: View {
     let accessibilityLabel: String
     
     var body: some View {
-        Link(destination: URL(string: self.url)!) {
-            ZStack {
-                Circle()
-                    .foregroundStyle(self.color)
-                    .frame(width: 60, height: 60)
-                
-                Image(systemName: self.icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 22, height: 22)
-                    .foregroundStyle(.white)
+        HStack {
+            Link(destination: URL(string: self.url)!) {
+                ZStack {
+                    Circle()
+                        .foregroundStyle(self.color)
+                        .frame(width: 60, height: 60)
+                    
+                    Image(systemName: self.icon)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 22, height: 22)
+                        .foregroundStyle(.white)
+                }
             }
         }
         .accessibilityLabel(self.accessibilityLabel)
