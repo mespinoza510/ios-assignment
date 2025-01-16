@@ -21,7 +21,11 @@ struct RecipeListView: View {
                 } else {
                     List {
                         ForEach(self.viewModel.recipes, id: \.uuid) { recipe in
-                            RecipeCell(recipe: recipe)
+                            NavigationLink {
+                                RecipeDetailView(viewModel: RecipeDetailViewModel(recipe: recipe))
+                            } label: {
+                                RecipeCell(recipe: recipe)
+                            }
                         }
                     }
                     .listStyle(.plain)
