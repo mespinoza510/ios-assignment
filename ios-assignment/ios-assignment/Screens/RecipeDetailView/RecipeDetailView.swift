@@ -65,7 +65,7 @@ fileprivate struct RecipeBannerView: View {
                 .scaledToFill()
                 
         } placeholder: {
-            Image(systemName: "photo")
+            Image(.foodPlaceholder)
                 .resizable()
                 .frame(height: 300.0)
                 .scaledToFill()
