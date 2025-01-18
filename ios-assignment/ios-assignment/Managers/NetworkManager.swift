@@ -7,7 +7,13 @@
 
 import SwiftUI
 
-class NetworkManager {
+
+protocol NetworkManagerProtocol {
+    func getRecipes() async throws -> [Recipe]
+}
+
+
+class NetworkManager: NetworkManagerProtocol {
     static let shared = NetworkManager()
     
     private let endpoint = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json"
@@ -29,6 +35,7 @@ class NetworkManager {
         }
         
         let recipesResponse = try self.decoder.decode(RecipesResponse.self, from: data)
+        
         return recipesResponse.recipes
     }
 }

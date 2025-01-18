@@ -15,11 +15,17 @@ final class RecipeListViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var recipes: [Recipe] = []
     
+    private let networkManager: NetworkManagerProtocol
+    
+    init(networkManager: NetworkManagerProtocol = NetworkManager.shared) {
+        self.networkManager = networkManager
+    }
+    
     func fetchRecipes() async {
         self.showLoadingView()
         
         do {
-            self.recipes = try await NetworkManager.shared.getRecipes()
+            self.recipes = try await self.networkManager.getRecipes()
             self.hideLoadingView()
         } catch let error as AppError {
             self.hideLoadingView()
