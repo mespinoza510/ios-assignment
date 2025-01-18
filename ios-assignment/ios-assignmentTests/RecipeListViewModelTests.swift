@@ -9,8 +9,7 @@ import XCTest
 @testable import ios_assignment
 
 
-enum NetworkErrorType {
-    case none
+enum NetworkErrorType: CaseIterable {
     case invalidURL
     case invalidResponse
     case decodingError
@@ -18,20 +17,22 @@ enum NetworkErrorType {
 
 
 class MockNetworkManager: NetworkManagerProtocol {
-    var errorType: NetworkErrorType = .none
+    var errorType: NetworkErrorType?
     var recipesResponse: [Recipe] = []
     
     func getRecipes() async throws -> [Recipe] {
-        switch errorType {
-        case .none:
-            return self.recipesResponse
-        case .invalidURL:
-            throw AppError.invalidURL
-        case .invalidResponse:
-            throw AppError.invalidResponse
-        case .decodingError:
-            throw AppError.decodingError
+        if let errorType = self.errorType {
+            switch errorType {
+            case .invalidURL:
+                throw AppError.invalidURL
+            case .invalidResponse:
+                throw AppError.invalidResponse
+            case .decodingError:
+                throw AppError.decodingError
+            }
         }
+        
+        return self.recipesResponse
     }
 }
 
@@ -74,48 +75,30 @@ final class RecipeListViewModelTests: XCTestCase {
         }
     }
     
-    func testFetchRecipesNetworkFailureThrowInvalidURLError() async {
-        // Arrange: Set up the mock network manager to simulate an invalid URL error
-        self.mockNetworkManager.errorType = .invalidURL
-        // Act: Try to fetch recipes
-        await viewModel.fetchRecipes()
-        
-        // Assert: Check that the recipes are not updated, loading indicator is hidden, and the alert context is set correctly
-        await MainActor.run {
-            XCTAssertTrue(viewModel.recipes.isEmpty, "Recipes should be empty on failure.")
-            XCTAssertFalse(viewModel.isLoading, "Loading indicator should be hidden after failure.")
+    func testFetchRecipesWithErrorHandling() async {
+        for errorType in NetworkErrorType.allCases {
             
-            // Check if alert context contains the expected error
-            XCTAssertEqual(viewModel.alertContext.alertType?.title, AppError.invalidURL.title, "Alert title should match the network error title.")
-            XCTAssertEqual(viewModel.alertContext.alertType?.message, AppError.invalidURL.message, "Alert message should match the network error message.")
-        }
-    }
-    
-    func testFetchRecipesNetworkFailureThrowInvalidResponseError() async {
-        self.mockNetworkManager.errorType = .invalidResponse
-        
-        await viewModel.fetchRecipes()
-        
-        await MainActor.run {
-            XCTAssertTrue(viewModel.recipes.isEmpty, "Recipes should be empty on failure.")
-            XCTAssertFalse(viewModel.isLoading, "Loading indicator should be hidden after failure.")
+            self.mockNetworkManager.errorType = errorType
             
-            XCTAssertEqual(viewModel.alertContext.alertType?.title, AppError.invalidResponse.title, "Alert title should match the network error title.")
-            XCTAssertEqual(viewModel.alertContext.alertType?.message, AppError.invalidResponse.message, "Alert message should match the network error message.")
-        }
-    }
-    
-    func testFetchRecipesNetworkFailureThrowDecodingError() async {
-        self.mockNetworkManager.errorType = .decodingError
-        
-        await viewModel.fetchRecipes()
-        
-        await MainActor.run {
-            XCTAssertTrue(self.viewModel.recipes.isEmpty, "Recipes should be empty on failure.")
-            XCTAssertFalse(self.viewModel.isLoading, "Loading indicator should be hidden after failure.")
+            await self.viewModel.fetchRecipes()
             
-            XCTAssertEqual(self.viewModel.alertContext.alertType?.title, AppError.decodingError.title, "Alert title should match the network error title.")
-            XCTAssertEqual(self.viewModel.alertContext.alertType?.message, AppError.decodingError.message, "Alert message should match the network error message.")
+            await MainActor.run {
+                XCTAssertTrue(self.viewModel.recipes.isEmpty, "Recipes should be empty on failure.")
+                XCTAssertFalse(self.viewModel.isLoading, "Loading indicator should be hidden after failure.")
+                
+                let expectedError: AppError
+                switch errorType {
+                case .invalidURL:
+                    expectedError = .invalidURL
+                case .invalidResponse:
+                    expectedError = .invalidResponse
+                case .decodingError:
+                    expectedError = .decodingError
+                }
+                
+                XCTAssertEqual(self.viewModel.alertContext.alertType?.title, expectedError.title, "Alert title should match the network error title.")
+                XCTAssertEqual(self.viewModel.alertContext.alertType?.message, expectedError.message, "Alert message should match the network error message.")
+            }
         }
     }
 }
