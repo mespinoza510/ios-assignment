@@ -27,16 +27,7 @@ struct RecipeDetailView: View {
                 .lineLimit(1)
                 .padding(.top)
             
-            if let sourceUrl = self.viewModel.recipe.sourceUrl, let youtubeUrl = self.viewModel.recipe.youtubeUrl {
-                HStack {
-                    RecipeLinkView(url: sourceUrl, icon: "network", color: .green, accessibilityLabel: "Recipe Source")
-                    
-                    RecipeLinkView(url: youtubeUrl, icon: "play.fill", color: .red, accessibilityLabel: "Youtube Video")
-                }
-                .padding(EdgeInsets(top: 10.0, leading: 20.0, bottom: 10.0, trailing: 20.0))
-                .background(Color(.secondarySystemBackground))
-                .clipShape(.capsule)
-            }
+            RecipeSourcesView(sourceUrl: self.viewModel.recipe.sourceUrl, youtubeUrl: self.viewModel.recipe.youtubeUrl)
             
             Spacer()
         }
@@ -102,3 +93,33 @@ fileprivate struct RecipeLinkView: View {
         .accessibilityLabel(self.accessibilityLabel)
     }
 }
+
+
+fileprivate struct RecipeSourcesView: View {
+    
+    var sourceUrl: String?
+    var youtubeUrl: String?
+    
+    var body: some View {
+        HStack {
+            if let sourceUrl = self.sourceUrl {
+                RecipeLinkView(url: sourceUrl, icon: "network", color: .green, accessibilityLabel: "Recipe Source")
+            }
+            
+            if let youtubeUrl = self.youtubeUrl {
+                RecipeLinkView(url: youtubeUrl, icon: "play.fill", color: .red, accessibilityLabel: "Recipe YouTube")
+            }
+            
+            if sourceUrl == nil && youtubeUrl == nil {
+                Text("No sources available for this recipe")
+                    .foregroundStyle(.secondary)
+                    .italic()
+            }
+        }
+        .padding(EdgeInsets(top: 10.0, leading: 20.0, bottom: 10.0, trailing: 20.0))
+        .background(Color(.secondarySystemBackground))
+        .clipShape(.capsule)
+    }
+}
+
+
