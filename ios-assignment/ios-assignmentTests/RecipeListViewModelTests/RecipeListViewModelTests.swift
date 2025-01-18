@@ -10,7 +10,6 @@ import XCTest
 
 
 final class RecipeListViewModelTests: XCTestCase {
-    
     var viewModel: RecipeListViewModel!
     var mockNetworkManager: MockNetworkManager!
     
@@ -28,7 +27,6 @@ final class RecipeListViewModelTests: XCTestCase {
     }
     
     func testFetchRecipesSuccess() async {
-        // Arrange
         let mockRecipes = [
             Recipe(cuisine: "Italian", name: "Pizza", uuid: "1"),
             Recipe(cuisine: "Mexican", name: "Tacos", uuid: "2")
@@ -36,7 +34,7 @@ final class RecipeListViewModelTests: XCTestCase {
         
         self.mockNetworkManager.recipesResponse = mockRecipes
         
-        // Act
+        // invoke mock request
         await self.viewModel.fetchRecipes()
         
         // Assert
