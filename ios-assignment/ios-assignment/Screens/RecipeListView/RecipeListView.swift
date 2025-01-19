@@ -48,7 +48,21 @@ struct RecipesUnavailableView: View {
     
     var body: some View {
         VStack {
-            ContentUnavailableView("No recipes found", systemImage: "text.page.badge.magnifyingglass")
+            if #available(iOS 17.0, *) {
+                ContentUnavailableView("No recipes found", systemImage: "text.page.badge.magnifyingglass")
+            } else {
+                VStack {
+                    Image(systemName: "text.page.badge.magnifyingglass")
+                        .resizable()
+                        .frame(width: 40.0, height: 50.0)
+                        .foregroundStyle(Color.secondary)
+                    
+                    Text("No recipes found")
+                        .font(.title2)
+                        .bold()
+                        .lineLimit(1)
+                }
+            }
         }
     }
 }
