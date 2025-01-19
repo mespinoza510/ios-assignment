@@ -18,6 +18,4 @@ final class RecipeDetailViewModel: ObservableObject {
     init(recipe: Recipe) {
         self.recipe = recipe
     }
-    
-    //TODO: error handling for links that do not work ie. youtube url and sourceUrl
 }

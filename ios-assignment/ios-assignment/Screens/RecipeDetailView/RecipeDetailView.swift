@@ -42,7 +42,7 @@ struct RecipeDetailView: View {
     }
 }
 
-
+// MARK: - Private custom views
 fileprivate struct RecipeBannerView: View {
     
     let image: String
