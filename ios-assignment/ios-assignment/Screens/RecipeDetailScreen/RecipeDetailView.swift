@@ -10,6 +10,7 @@ import SwiftUI
 struct RecipeDetailView: View {
     
     @StateObject var viewModel: RecipeDetailViewModel
+    @State private var urlToOpen: String? = nil
     
     var body: some View {
         VStack {
@@ -27,12 +28,13 @@ struct RecipeDetailView: View {
                 .lineLimit(1)
                 .padding(.top)
             
-            RecipeSourcesView(sourceUrl: self.viewModel.recipe.sourceUrl, youtubeUrl: self.viewModel.recipe.youtubeUrl)
+            RecipeSourcesView(urlToOpen: self.$urlToOpen, sourceUrl: self.viewModel.recipe.sourceUrl, youtubeUrl: self.viewModel.recipe.youtubeUrl)
             
             Spacer()
         }
         .navigationTitle(self.viewModel.recipe.name)
         .navigationBarTitleDisplayMode(.inline)
+        .openSafari(url: self.$urlToOpen)
     }
 }
 
@@ -74,20 +76,22 @@ fileprivate struct RecipeLinkView: View {
     let color: Color
     let accessibilityLabel: String
     
+    @Binding var urlToOpen: String?
+    
     var body: some View {
-        HStack {
-            Link(destination: URL(string: self.url)!) {
-                ZStack {
-                    Circle()
-                        .foregroundStyle(self.color)
-                        .frame(width: 60, height: 60)
-                    
-                    Image(systemName: self.icon)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 22, height: 22)
-                        .foregroundStyle(.white)
-                }
+        Button {
+            self.urlToOpen = self.url
+        } label: {
+            ZStack {
+                Circle()
+                    .foregroundStyle(self.color)
+                    .frame(width: 60, height: 60)
+                
+                Image(systemName: self.icon)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 22, height: 22)
+                    .foregroundStyle(.white)
             }
         }
         .accessibilityLabel(self.accessibilityLabel)
@@ -96,6 +100,7 @@ fileprivate struct RecipeLinkView: View {
 
 
 fileprivate struct RecipeSourcesView: View {
+    @Binding var urlToOpen: String?
     
     var sourceUrl: String?
     var youtubeUrl: String?
@@ -103,11 +108,11 @@ fileprivate struct RecipeSourcesView: View {
     var body: some View {
         HStack {
             if let sourceUrl = self.sourceUrl {
-                RecipeLinkView(url: sourceUrl, icon: "network", color: .green, accessibilityLabel: "Recipe Source")
+                RecipeLinkView(url: sourceUrl, icon: "network", color: .green, accessibilityLabel: "Recipe Source", urlToOpen: self.$urlToOpen)
             }
             
             if let youtubeUrl = self.youtubeUrl {
-                RecipeLinkView(url: youtubeUrl, icon: "play.fill", color: .red, accessibilityLabel: "Recipe YouTube")
+                RecipeLinkView(url: youtubeUrl, icon: "play.fill", color: .red, accessibilityLabel: "Recipe YouTube", urlToOpen: self.$urlToOpen)
             }
             
             if sourceUrl == nil && youtubeUrl == nil {
