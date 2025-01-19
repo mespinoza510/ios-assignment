@@ -2,7 +2,9 @@
 
 ### Summary: Include screen shots or a video of your app highlighting its features
   
-#### List of Recipes / Recipe Detail Screen / Open URL within App 
+#### Empty State / List of Recipes / Recipe Detail Screen / Open URL within App 
+<img src="https://github.com/user-attachments/assets/1be307a1-1747-4e5a-98ce-f3b59e90968b" alt="Empty State" width="150" height="300">
+
 <img src="https://github.com/user-attachments/assets/559b7916-7ee9-4237-af7e-2cd9f48240cd" alt="Recipes Screenshot" width="150" height="300">
 
 <img src="https://github.com/user-attachments/assets/a25c955f-775c-4fbb-a7b4-55c46207e53b" alt="Recipes Detail Screen" width="150" height="300">
