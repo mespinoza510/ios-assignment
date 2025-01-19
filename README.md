@@ -1,6 +1,13 @@
 # ios-assignment
 
 ### Summary: Include screen shots or a video of your app highlighting its features
+  
+#### List of Recipes / Recipe Detail Screen / Open URL within App 
+<img src="https://github.com/user-attachments/assets/559b7916-7ee9-4237-af7e-2cd9f48240cd" alt="Recipes Screenshot" width="150" height="300">
+
+<img src="https://github.com/user-attachments/assets/a25c955f-775c-4fbb-a7b4-55c46207e53b" alt="Recipes Detail Screen" width="150" height="300">
+
+<img src="https://github.com/user-attachments/assets/5a399e9a-6907-40a4-962f-2d1e107f6003" alt="Open url in-app" width="150" height="300">
 
 
 
