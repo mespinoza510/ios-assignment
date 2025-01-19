@@ -13,7 +13,6 @@ struct RecipeCell: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 20.0) {
-            //TODO: Remove force unwrap
             if let recipeImage = self.recipe.photoUrlSmall {
                 RecipeImage(image: recipeImage)
             }
