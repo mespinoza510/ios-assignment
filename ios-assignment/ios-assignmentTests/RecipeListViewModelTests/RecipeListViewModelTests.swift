@@ -26,6 +26,83 @@ final class RecipeListViewModelTests: XCTestCase {
         self.viewModel = nil
     }
     
+    func testPaginationSuccess() async {
+        let mockRecipes = (1...26).map { Recipe(cuisine: "cuisine", name: "\($0)", uuid: "\($0)")}
+        
+        self.mockNetworkManager.recipesResponse = mockRecipes
+        
+        await self.viewModel.fetchAllRecipes(isRefresh: false)
+        
+        await MainActor.run {
+            XCTAssertEqual(self.viewModel.visibleRecipes.count, 25, "There should be two visible recipes after the first fetch.")
+        }
+        
+        await self.viewModel.loadNextPage()
+        
+        await MainActor.run {
+            XCTAssertEqual(self.viewModel.visibleRecipes.count, 26, "There should be four visible recipes after loading the next page.")
+            XCTAssertEqual(self.viewModel.allRecipes.count, 0, "All recipes should be empty after loading all the available recipes.")
+        }
+    }
+    
+    func testPaginationWithFewerThanPageSizeRecipes() async {
+        let mockRecipes = (1...10).map { Recipe(cuisine: "cuisine", name: "\($0)", uuid: "\($0)")}
+
+        self.mockNetworkManager.recipesResponse = mockRecipes
+        
+        await self.viewModel.fetchAllRecipes(isRefresh: false)
+        
+        await MainActor.run {
+            XCTAssertEqual(self.viewModel.visibleRecipes.count, 10, "There should be four visible recipes after loading the next page.")
+            XCTAssertEqual(self.viewModel.allRecipes.count, 0, "All recipes should be empty after loading all the available recipes.")
+        }
+    }
+    
+    func testPaginationWithExactlyPageSizeRecipes() async {
+        let mockRecipes = (1...25).map { Recipe(cuisine: "cuisine", name: "\($0)", uuid: "\($0)")}
+        
+        self.mockNetworkManager.recipesResponse = mockRecipes
+        
+        await self.viewModel.fetchAllRecipes(isRefresh: false)
+        
+        await MainActor.run {
+            XCTAssertEqual(self.viewModel.visibleRecipes.count, 25, "There should be 25 visible recipes after the first fetch.")
+        }
+        
+        await self.viewModel.loadNextPage()
+        
+        await MainActor.run {
+            XCTAssertEqual(self.viewModel.visibleRecipes.count, 25, "There should be four visible recipes after loading the next page.")
+            XCTAssertEqual(self.viewModel.allRecipes.count, 0, "All recipes should be empty after loading all the available recipes.")
+        }
+    }
+    
+    func testPaginationWithRefreshEnabled() async {
+        let mockRecipes = (1...30).map { Recipe(cuisine: "cuisine", name: "\($0)", uuid: "\($0)")}
+        
+        self.mockNetworkManager.recipesResponse = mockRecipes
+        
+        await self.viewModel.fetchAllRecipes(isRefresh: false)
+        
+        await MainActor.run {
+            XCTAssertEqual(self.viewModel.visibleRecipes.count, 25, "There should be 25 visible recipes after the first fetch.")
+        }
+        
+        await self.viewModel.loadNextPage()
+        
+        await MainActor.run {
+            XCTAssertEqual(self.viewModel.visibleRecipes.count, 30, "There should be four visible recipes after loading the next page.")
+            XCTAssertEqual(self.viewModel.allRecipes.count, 0, "All recipes should be empty after loading all the available recipes.")
+        }
+        
+        await self.viewModel.fetchAllRecipes(isRefresh: true)
+        
+        await MainActor.run {
+            XCTAssertEqual(self.viewModel.visibleRecipes.count, 25, "There should be 25 visible recipes after the first fetch.")
+            XCTAssertEqual(self.viewModel.allRecipes.count, 5, "All recipes should have 5 items after refreshing.")
+        }
+    }
+    
     func testFetchRecipesSuccess() async {
         let mockRecipes = [
             Recipe(cuisine: "Italian", name: "Pizza", uuid: "1"),
@@ -35,11 +112,11 @@ final class RecipeListViewModelTests: XCTestCase {
         self.mockNetworkManager.recipesResponse = mockRecipes
         
         // invoke mock request
-        await self.viewModel.fetchRecipes()
+        await self.viewModel.fetchAllRecipes()
         
         // Assert
         await MainActor.run {
-            XCTAssertEqual(self.viewModel.recipes, mockRecipes, "The fetched recipes should match the mock recipes.")
+            XCTAssertEqual(self.viewModel.visibleRecipes, mockRecipes, "The fetched recipes should match the mock recipes.")
             XCTAssertFalse(self.viewModel.isLoading, "Loading indicator should be hidden after fetching recipes.")
         }
     }
@@ -49,10 +126,10 @@ final class RecipeListViewModelTests: XCTestCase {
             
             self.mockNetworkManager.errorType = errorType
             
-            await self.viewModel.fetchRecipes()
+            await self.viewModel.fetchAllRecipes()
             
             await MainActor.run {
-                XCTAssertTrue(self.viewModel.recipes.isEmpty, "Recipes should be empty on failure.")
+                XCTAssertTrue(self.viewModel.allRecipes.isEmpty, "Recipes should be empty on failure.")
                 XCTAssertFalse(self.viewModel.isLoading, "Loading indicator should be hidden after failure.")
                 
                 let expectedError: AppError
