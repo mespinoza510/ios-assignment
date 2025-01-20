@@ -2,7 +2,7 @@
 
 ### Summary: Include screen shots or a video of your app highlighting its features
   
-#### Empty State / List of Recipes / Recipe Detail Screen / Open URL within App 
+#### Empty State / List of Recipes / Recipe Detail Screen / Open URL within App / Pagination feature
 <img src="https://github.com/user-attachments/assets/1be307a1-1747-4e5a-98ce-f3b59e90968b" alt="Empty State" width="150" height="300">
 
 <img src="https://github.com/user-attachments/assets/559b7916-7ee9-4237-af7e-2cd9f48240cd" alt="Recipes Screenshot" width="150" height="300">
@@ -11,6 +11,7 @@
 
 <img src="https://github.com/user-attachments/assets/5a399e9a-6907-40a4-962f-2d1e107f6003" alt="Open url in-app" width="150" height="300">
 
+<img src="https://github.com/user-attachments/assets/f6c61fe8-1569-4e1a-a4a3-693bcdb4bd9a" alt="Open url in-app" width="150" height="300">
 
 
 ### Focus Areas: What specific areas of the project did you prioritize? Why did you choose to focus on these areas?
