@@ -65,11 +65,6 @@ final class RecipeListViewModel: ObservableObject {
         self.allRecipes.removeFirst(recipesToLoad)
     }
     
-    private func resetData() {
-        self.allRecipes.removeAll()
-        self.visibleRecipes.removeAll()
-    }
-    
     private func appendVisibleRecipes(from recipes: [Recipe]) {
         let initialBatch = recipes.prefix(self.pageSize)
         self.visibleRecipes.append(contentsOf: initialBatch)
