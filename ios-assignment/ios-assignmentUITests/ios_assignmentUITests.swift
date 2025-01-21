@@ -7,37 +7,67 @@
 
 import XCTest
 
-final class ios_assignmentUITests: XCTestCase {
+final class RecipeListUITests: XCTestCase {
+    
+    private var app: XCUIApplication!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
+        self.app = XCUIApplication()
+        self.app.launch()
+        
+        // Stop test immediately when failure occurs
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        self.app.terminate()
+        self.app = nil
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testNavigationTitleIsDisplayed() throws {
+        let navigationTitleElement = app.navigationBars["Recipes"].firstMatch
+        XCTAssertTrue(navigationTitleElement.exists, "Navigation title 'Recipes' should be displayed.")
     }
-
+    
     @MainActor
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
+    func testFirstCellTitleIsDisplayed() throws {
+        let firstCell = self.app.cells.element(boundBy: 0)
+        XCTAssertTrue(firstCell.waitForExistence(timeout: 1), "First cell did not appear in time.")
+        
+        // Verify all static texts exist in first cell
+        let recipeNameLabel = firstCell.staticTexts["RecipeNameLabel"]
+        let cuisineLabel = firstCell.staticTexts["CuisineLabel"]
+        let recipeDesciptionLabel = firstCell.staticTexts["RecipeDescriptionLabel"]
+        
+        XCTAssertTrue(recipeNameLabel.exists, "RecipeNameLabel does not exist in the first cell")
+        XCTAssertTrue(cuisineLabel.exists, "CuisineLabel does not exist in the first cell")
+        XCTAssertTrue(recipeDesciptionLabel.exists, "RecipeDescriptionLabel does not exist in the first cell")
+    }
+    
+    @MainActor
+    func testLoadMoreRecipesButtonIsDisplayed() throws {
+        let list = self.app.collectionViews.firstMatch
+        let firstCell = self.app.cells.element(boundBy: 0)
+        XCTAssertTrue(firstCell.waitForExistence(timeout: 1), "First cell did not appear in time.")
+        
+        self.swipeUpToLoadMoreButton(in: list)
+        
+        XCTAssertTrue(self.doesLoadMoreButtonExist, "Load more recipes button does not exist")
+    }
+    
+    //MARK: - private helper methods and properties
+    private var doesLoadMoreButtonExist: Bool {
+        return self.app.buttons["LoadMoreButton"].exists
+    }
+    
+    private func swipeUp(in list: XCUIElement) {
+        list.swipeUp()
+    }
+    
+    private func swipeUpToLoadMoreButton(in list: XCUIElement) {
+        while !self.doesLoadMoreButtonExist {
+            self.swipeUp(in: list)
         }
     }
 }
