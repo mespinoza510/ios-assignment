@@ -45,7 +45,7 @@ final class RecipeListUITests: XCTestCase {
     }
     
     @MainActor
-    func testLoadMoreRecipesButtonIsDisplayed() throws {
+    func testSwipeDownUntilLoadMoreRecipesButtonIsDisplayed() throws {
         let list = self.app.collectionViews.firstMatch
         let firstCell = self.app.cells.element(boundBy: 0)
         XCTAssertTrue(firstCell.waitForExistence(timeout: 1), "First cell did not appear in time.")
