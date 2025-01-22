@@ -7,6 +7,7 @@
 
 import XCTest
 
+
 final class RecipeListUITests: XCTestCase {
     
     private var app: XCUIApplication!
@@ -35,9 +36,9 @@ final class RecipeListUITests: XCTestCase {
         let firstCell = self.waitForCell(at: 0)
         
         // Verify all static texts exist in first cell
-        let recipeNameLabel = firstCell.staticTexts["RecipeNameLabel"]
-        let cuisineLabel = firstCell.staticTexts["CuisineLabel"]
-        let recipeDesciptionLabel = firstCell.staticTexts["RecipeDescriptionLabel"]
+        let recipeNameLabel = firstCell.recipeNameLabel
+        let cuisineLabel = firstCell.cuisineLabel
+        let recipeDesciptionLabel = firstCell.recipeDescriptionLabel
         
         XCTAssertTrue(recipeNameLabel.exists, "RecipeNameLabel does not exist in the first cell")
         XCTAssertTrue(cuisineLabel.exists, "CuisineLabel does not exist in the first cell")
@@ -58,7 +59,7 @@ final class RecipeListUITests: XCTestCase {
     @MainActor
     func testLoadEntireListAndAssertLastCell() throws {
         let list = self.app.collectionViews.firstMatch
-        let loadMoreButton = self.app.buttons["LoadMoreButton"]
+        let loadMoreButton = self.app.loadMoreButton
         
         self.swipeUpToLoadMoreButton(in: list)
         XCTAssertTrue(loadMoreButton.exists, "Load more button does not exist")
@@ -77,7 +78,7 @@ final class RecipeListUITests: XCTestCase {
             return
         }
         
-        let lastCellLabel = lastRecipeCell.staticTexts["RecipeNameLabel"].label
+        let lastCellLabel = lastRecipeCell.recipeNameLabel.label
         
         // Assert last cell of list and ensure 'Load More' button does not exist
         XCTAssertFalse(loadMoreButton.exists, "Load more button should not exist after loading the whole list")
@@ -86,7 +87,7 @@ final class RecipeListUITests: XCTestCase {
     
     //MARK: - private helper methods and properties
     private var doesLoadMoreButtonExist: Bool {
-        return self.app.buttons["LoadMoreButton"].exists
+        return self.app.loadMoreButton.exists
     }
     
     private func swipeUp(in list: XCUIElement) {
@@ -123,7 +124,7 @@ final class RecipeListUITests: XCTestCase {
     }
     
     private func tapLoadMoreButton() {
-        let button = self.app.buttons["LoadMoreButton"]
+        let button = self.app.loadMoreButton
         button.tap()
     }
     
@@ -148,5 +149,24 @@ final class RecipeListUITests: XCTestCase {
     private func getLabelDescription(from cell: XCUIElement, with identifier: String) -> String {
         let element = cell.descendants(matching: .staticText).matching(identifier: identifier).firstMatch
         return element.label
+    }
+}
+
+
+extension XCUIElement {
+    var recipeNameLabel: XCUIElement {
+        return self.staticTexts["RecipeNameLabel"]
+    }
+    
+    var cuisineLabel: XCUIElement {
+        return self.staticTexts["CuisineLabel"]
+    }
+    
+    var recipeDescriptionLabel: XCUIElement {
+        return self.staticTexts["RecipeDescriptionLabel"]
+    }
+    
+    var loadMoreButton: XCUIElement {
+        return self.buttons["LoadMoreButton"]
     }
 }
