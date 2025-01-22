@@ -24,4 +24,12 @@ extension XCUIElement {
     var loadMoreButton: XCUIElement {
         return self.buttons["LoadMoreButton"]
     }
+    
+    var sourceButton: XCUIElement {
+        return self.buttons["sourceButton"]
+    }
+    
+    var youtubeButton: XCUIElement {
+        return self.buttons["youtubeButton"]
+    }
 }

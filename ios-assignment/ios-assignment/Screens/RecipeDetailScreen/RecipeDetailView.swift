@@ -109,10 +109,12 @@ fileprivate struct RecipeSourcesView: View {
         HStack {
             if let sourceUrl = self.sourceUrl {
                 RecipeLinkView(url: sourceUrl, icon: "network", color: .green, accessibilityLabel: "Recipe Source", urlToOpen: self.$urlToOpen)
+                    .accessibilityIdentifier("sourceButton")
             }
             
             if let youtubeUrl = self.youtubeUrl {
                 RecipeLinkView(url: youtubeUrl, icon: "play.fill", color: .red, accessibilityLabel: "Recipe YouTube", urlToOpen: self.$urlToOpen)
+                    .accessibilityIdentifier("youtubeButton")
             }
             
             if sourceUrl == nil && youtubeUrl == nil {
