@@ -16,6 +16,7 @@ class ReRecipeDetailViewUITests: BaseUITest {
         cell.tap()
         
         XCTAssert(self.app.navigationBars["Apam Balik"].exists, "Navigation bar not found")
+        XCTAssert(self.app.images["RecipeImageRendered"].exists, "Image not found")
         XCTAssert(self.app.sourceButton.exists, "Source button not found")
         XCTAssert(self.app.youtubeButton.exists, "Youtube button not found")
     }

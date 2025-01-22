@@ -56,12 +56,14 @@ fileprivate struct RecipeBannerView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 300.0)
                 .scaledToFill()
+                .accessibilityIdentifier("RecipeImageRendered")
                 
         } placeholder: {
             Image(.foodPlaceholder)
                 .resizable()
                 .frame(height: 300.0)
                 .scaledToFill()
+                .accessibilityIdentifier("RecipeImagePlaceholder")
         }
         .accessibilityHidden(true)
         .padding(.top)
