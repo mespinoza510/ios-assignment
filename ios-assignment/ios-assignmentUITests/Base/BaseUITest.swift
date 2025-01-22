@@ -74,7 +74,8 @@ class BaseUITest: XCTestCase {
         let lastVisibleCellIndex = cells.count - 1
         return cells.element(boundBy: lastVisibleCellIndex)
     }
-
+    
+    /// concatenates the string of the cell label
     private func getCombinedLabel(from cell: XCUIElement) -> String {
         let recipeNameLabel = getLabelDescription(from: cell, with: "RecipeNameLabel")
         let cuisineLabel = getLabelDescription(from: cell, with: "CuisineLabel")
@@ -82,7 +83,8 @@ class BaseUITest: XCTestCase {
         
         return recipeNameLabel + cuisineLabel + recipeDescriptionLabel
     }
-
+    
+    /// goes down view hierarchy in order to fetch the element string
     private func getLabelDescription(from cell: XCUIElement, with identifier: String) -> String {
         let element = cell.descendants(matching: .staticText).matching(identifier: identifier).firstMatch
         return element.label
