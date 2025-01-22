@@ -56,22 +56,3 @@ final class RecipeListUITests: BaseUITest {
         XCTAssertEqual(lastRecipeCell.recipeNameLabel.label, "White Chocolate Crème Brûlée", "Expected last cell to be 'White Chocolate Crème Brûlée'")
     }
 }
-
-
-extension XCUIElement {
-    var recipeNameLabel: XCUIElement {
-        return self.staticTexts["RecipeNameLabel"]
-    }
-    
-    var cuisineLabel: XCUIElement {
-        return self.staticTexts["CuisineLabel"]
-    }
-    
-    var recipeDescriptionLabel: XCUIElement {
-        return self.staticTexts["RecipeDescriptionLabel"]
-    }
-    
-    var loadMoreButton: XCUIElement {
-        return self.buttons["LoadMoreButton"]
-    }
-}
