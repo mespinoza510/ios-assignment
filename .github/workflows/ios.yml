@@ -19,11 +19,8 @@ jobs:
         run: |
           echo "Listing root directory:"
           ls -la
-          echo "Navigating to ios-assignment:"
-          cd ios-assignment || exit 1
-          ls -la
-          echo "Navigating to ios-assignment/ios-assignment:"
-          cd ios-assignment || exit 1
+          echo "Navigating to ios-assignment/ios-assignment directory:"
+          cd ios-assignment/ios-assignment || exit 1
           ls -la
           
       - name: Check if Xcode project exists
@@ -34,23 +31,16 @@ jobs:
 
           echo "Checking for ios-assignment.xcodeproj in the current directory:"
           if [ -f "ios-assignment.xcodeproj" ]; then
-            echo "Found ios-assignment.xcodeproj in the first ios-assignment folder"
+            echo "Found ios-assignment.xcodeproj in the current directory"
           else
-            echo "ios-assignment.xcodeproj does not exist in the first ios-assignment folder"
-          fi
-          
-          echo "Checking for ios-assignment/ios-assignment.xcodeproj in the second ios-assignment folder:"
-          if [ -f "ios-assignment/ios-assignment.xcodeproj" ]; then
-            echo "Found ios-assignment.xcodeproj in the second ios-assignment folder"
-          else
-            echo "ios-assignment.xcodeproj does not exist in the second ios-assignment folder"
+            echo "ios-assignment.xcodeproj does not exist in the current directory"
             exit 1
           fi
 
       - name: Set Default Scheme
         run: |
           echo "Running xcodebuild -list to fetch schemes..."
-          scheme_list=$(xcodebuild -list -json -project ios-assignment/ios-assignment.xcodeproj 2>&1)
+          scheme_list=$(xcodebuild -list -json -project ios-assignment.xcodeproj 2>&1)
           echo "Scheme list output: $scheme_list"
           
           if [[ "$scheme_list" == *"error"* ]]; then
