@@ -22,20 +22,45 @@ jobs:
           echo "Navigating to ios-assignment:"
           cd ios-assignment || exit 1
           ls -la
+          
+      - name: Check if Xcode project exists
+        run: |
+          echo "Checking for ios-assignment.xcodeproj in the current directory:"
+          if [ -f "ios-assignment.xcodeproj" ]; then
+            echo "Found ios-assignment.xcodeproj"
+          else
+            echo "ios-assignment.xcodeproj does not exist"
+            exit 1
+          fi
 
       - name: Set Default Scheme
         run: |
-          scheme_list=$(xcodebuild -list -json -project ios-assignment.xcodeproj | tr -d "\n")
-          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-          echo $default | cat >default
-          echo Using default scheme: $default
+          echo "Running xcodebuild -list to fetch schemes..."
+          scheme_list=$(xcodebuild -list -json -project ios-assignment.xcodeproj 2>&1)
+          echo "Scheme list output: $scheme_list"
+          
+          if [[ "$scheme_list" == *"error"* ]]; then
+            echo "Error fetching schemes. Exiting."
+            exit 1
+          fi
+
+          # Extract the first target as the default scheme
+          default=$(echo $scheme_list | ruby -e "require 'json'; data = JSON.parse(STDIN.read); puts data['project']['targets'][0]")
+
+          if [ -z "$default" ]; then
+            echo "No default scheme found."
+            exit 1
+          fi
+
+          echo $default > default
+          echo "Using default scheme: $default"
 
       - name: Build
         env:
           scheme: ${{ 'default' }}
           platform: ${{ 'iOS Simulator' }}
         run: |
-          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
+          echo "Building with scheme $scheme"
           device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
           if [ $scheme = default ]; then scheme=$(cat default); fi
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
@@ -47,7 +72,7 @@ jobs:
           scheme: ${{ 'default' }}
           platform: ${{ 'iOS Simulator' }}
         run: |
-          # xcrun xctrace returns via stderr, not the expected stdout (see https://developer.apple.com/forums/thread/663959)
+          echo "Testing with scheme $scheme"
           device=`xcrun xctrace list devices 2>&1 | grep -oE 'iPhone.*?[^\(]+' | head -1 | awk '{$1=$1;print}' | sed -e "s/ Simulator$//"`
           if [ $scheme = default ]; then scheme=$(cat default); fi
           if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
