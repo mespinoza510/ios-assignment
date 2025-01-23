@@ -27,7 +27,6 @@ jobs:
           echo "Current directory is: $(pwd)"
           echo "Listing files in the current directory:"
           ls -la
-          cd ios-assignment.xcodeproj || exit 1
           
       - name: Set Default Scheme
         run: |
