@@ -62,17 +62,22 @@ class BaseUITest: XCTestCase {
     }
 
     func swipeUpToLoadMoreButton(in list: XCUIElement) {
-        while !app.loadMoreButton.exists {
+        while !self.app.element(for: .loadMoreButton).exists {
             swipeUp(in: list)
         }
     }
 
     func tapLoadMoreButton() {
-        let button = self.app.loadMoreButton
+        let button = self.app.element(for: .loadMoreButton)
         XCTAssertTrue(button.exists, "Load more button does not exist.")
         button.tap()
     }
-
+    
+    func assertElementExists(_ identifier: AccessibilityIdentifers, in parent: XCUIElement? = nil) {
+        let element = parent?.element(for: identifier) ?? self.app.element(for: identifier)
+        XCTAssertTrue(element.exists, "Could not find \(identifier.rawValue) in the specified parent element.")
+    }
+    
     // MARK: - Helper Methods
     private func getLastVisibleCell(in list: XCUIElement) -> XCUIElement {
         let cells = list.cells
@@ -82,9 +87,9 @@ class BaseUITest: XCTestCase {
     
     /// concatenates the string of the cell label
     private func getCombinedLabel(from cell: XCUIElement) -> String {
-        let recipeNameLabel = getLabelDescription(from: cell, with: "RecipeNameLabel")
-        let cuisineLabel = getLabelDescription(from: cell, with: "CuisineLabel")
-        let recipeDescriptionLabel = getLabelDescription(from: cell, with: "RecipeDescriptionLabel")
+        let recipeNameLabel = getLabelDescription(from: cell, with: "recipeNameLabel")
+        let cuisineLabel = getLabelDescription(from: cell, with: "cuisineLabel")
+        let recipeDescriptionLabel = getLabelDescription(from: cell, with: "recipeDescriptionLabel")
         
         return recipeNameLabel + cuisineLabel + recipeDescriptionLabel
     }
