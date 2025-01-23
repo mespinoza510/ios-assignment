@@ -10,19 +10,19 @@ import XCTest
 
 extension XCUIElement {
     var recipeNameLabel: XCUIElement {
-        return self.staticTexts["RecipeNameLabel"]
+        return self.staticTexts["recipeNameLabel"]
     }
     
     var cuisineLabel: XCUIElement {
-        return self.staticTexts["CuisineLabel"]
+        return self.staticTexts["cuisineLabel"]
     }
     
     var recipeDescriptionLabel: XCUIElement {
-        return self.staticTexts["RecipeDescriptionLabel"]
+        return self.staticTexts["recipeDescriptionLabel"]
     }
     
     var loadMoreButton: XCUIElement {
-        return self.buttons["LoadMoreButton"]
+        return self.buttons["loadMoreButton"]
     }
     
     var sourceButton: XCUIElement {
@@ -31,5 +31,13 @@ extension XCUIElement {
     
     var youtubeButton: XCUIElement {
         return self.buttons["youtubeButton"]
+    }
+    
+    var recipeLargeImageRendered: XCUIElement {
+        return self.images["recipeLargeImageRendered"]
+    }
+    
+    var recipeLargeImagePlaceholder: XCUIElement {
+        return self.images["recipeLargeImagePlaceholder"]
     }
 }

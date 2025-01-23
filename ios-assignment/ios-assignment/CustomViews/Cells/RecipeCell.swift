@@ -24,19 +24,19 @@ struct RecipeCell: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                     .accessibilityAddTraits(.isStaticText)
-                    .accessibilityIdentifier("RecipeNameLabel")
+                    .accessibilityIdentifier("recipeNameLabel")
                 
                 HStack(alignment: .center, spacing: 4.0) {
                     Text("Cuisine: ")
                         .foregroundStyle(.secondary)
                         .font(.subheadline)
                         .accessibilityAddTraits(.isStaticText)
-                        .accessibilityIdentifier("CuisineLabel")
+                        .accessibilityIdentifier("cuisineLabel")
                     
                     Text(self.recipe.cuisine)
                         .font(.subheadline)
                         .accessibilityAddTraits(.isStaticText)
-                        .accessibilityIdentifier("RecipeDescriptionLabel")
+                        .accessibilityIdentifier("recipeDescriptionLabel")
                 }
             }
         }

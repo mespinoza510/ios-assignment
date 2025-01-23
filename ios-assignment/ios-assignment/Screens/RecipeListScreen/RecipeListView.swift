@@ -72,7 +72,7 @@ struct RefreshButtonView: View {
                         .foregroundStyle(.blue)
                 }
                 .accessibilityAddTraits(.isButton)
-                .accessibilityIdentifier("LoadMoreButton")
+                .accessibilityIdentifier("loadMoreButton")
                 Spacer()
             }
         }
