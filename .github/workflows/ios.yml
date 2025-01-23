@@ -19,8 +19,8 @@ jobs:
         run: |
           echo "Listing root directory:"
           ls -la
-          echo "Navigating to ios-assignment/ios-assignment directory:"
-          cd ios-assignment/ios-assignment || exit 1
+          echo "Navigating to ios-assignment directory:"
+          cd ios-assignment || exit 1
           ls -la
           
       - name: Check if Xcode project exists
@@ -36,12 +36,12 @@ jobs:
             echo "ios-assignment.xcodeproj does not exist in the current directory"
           fi
 
-          # Check in the deeper subfolder
-          echo "Checking for ios-assignment.xcodeproj in the deeper ios-assignment directory:"
+          # Check in the subfolder
+          echo "Checking for ios-assignment.xcodeproj in the subfolder ios-assignment/ios-assignment.xcodeproj:"
           if [ -f "ios-assignment/ios-assignment.xcodeproj" ]; then
-            echo "Found ios-assignment.xcodeproj in the deeper ios-assignment directory"
+            echo "Found ios-assignment.xcodeproj in the subfolder"
           else
-            echo "ios-assignment.xcodeproj does not exist in the deeper ios-assignment directory"
+            echo "ios-assignment.xcodeproj does not exist in the subfolder"
             exit 1
           fi
 
