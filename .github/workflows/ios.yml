@@ -33,7 +33,6 @@ jobs:
           echo $default | cat >default
           echo Using default scheme: $default
       - name: Build
-        working-directory: ios-assignment/ios-assignment
         env:
           scheme: ${{ 'default' }}
           platform: ${{ 'iOS Simulator' }}
