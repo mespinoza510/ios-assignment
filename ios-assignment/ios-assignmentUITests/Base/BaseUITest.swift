@@ -51,9 +51,14 @@ class BaseUITest: XCTestCase {
     }
 
     func waitForCell(at index: Int, timeout: TimeInterval = 1) -> XCUIElement {
-        let cell = app.cells.element(boundBy: index)
+        let cell = self.app.cells.element(boundBy: index)
         XCTAssertTrue(self.waitForElement(cell, timeout: timeout), "Cell \(index) did not appear in time.")
         return cell
+    }
+    
+    func tapCell(at index: Int) {
+        let cell = self.app.cells.element(boundBy: index)
+        cell.tap()
     }
 
     func swipeUpToLoadMoreButton(in list: XCUIElement) {
