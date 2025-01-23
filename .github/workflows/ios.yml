@@ -34,6 +34,14 @@ jobs:
             echo "Found ios-assignment.xcodeproj in the current directory"
           else
             echo "ios-assignment.xcodeproj does not exist in the current directory"
+          fi
+
+          # Check in the deeper subfolder
+          echo "Checking for ios-assignment.xcodeproj in the deeper ios-assignment directory:"
+          if [ -f "ios-assignment/ios-assignment.xcodeproj" ]; then
+            echo "Found ios-assignment.xcodeproj in the deeper ios-assignment directory"
+          else
+            echo "ios-assignment.xcodeproj does not exist in the deeper ios-assignment directory"
             exit 1
           fi
 
