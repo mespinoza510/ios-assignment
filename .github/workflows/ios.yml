@@ -25,8 +25,6 @@ jobs:
           echo "Listing files in the current directory:"
           ls -la
           echo "Navigating to ios-assignment directory:"
-          cd ios-assignment || exit 1
-          ls -la
           
       - name: Set Default Scheme
         working-directory: ios-assignment/ios-assignment
