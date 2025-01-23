@@ -22,6 +22,9 @@ jobs:
           echo "Navigating to ios-assignment directory:"
           cd ios-assignment || exit 1
           ls -la
+
+          # go into xcodeProj file
+          cd ios-assigment.xcodeproj
           
       - name: Check if Xcode project exists
         run: |
@@ -29,11 +32,12 @@ jobs:
           echo "Listing files in the current directory:"
           ls -la
 
+          # check project.pbxproj instead
           echo "Checking for ios-assignment.xcodeproj in the current directory:"
-          if [ -f "ios-assignment.xcodeproj" ]; then
-            echo "Found ios-assignment.xcodeproj in the current directory"
+          if [ -f "project.pbxproj" ]; then
+            echo "Found project.pbxprojj in the current directory"
           else
-            echo "ios-assignment.xcodeproj does not exist in the current directory"
+            echo "project.pbxproj does not exist in the current directory"
           fi
 
           # Check in the subfolder
