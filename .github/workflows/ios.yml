@@ -26,9 +26,12 @@ jobs:
           ls -la
           echo "Navigating to ios-assignment directory:"
           cd ios-assignment || exit 1
+          echo "Current directory is: $(pwd)"
+          echo "Listing files in the current directory:"
           ls -la
           
       - name: Set Default Scheme
+        working-directory: ios-assignment
         run: |
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
           default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
