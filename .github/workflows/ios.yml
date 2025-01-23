@@ -18,9 +18,6 @@ jobs:
         run: |
           echo "Listing root directory:"
           ls -la
-          echo "Navigating to ios-assignment directory:"
-          cd ios-assignment || exit 1
-          ls -la
           
       - name: Check if Xcode project exists
         run: |
