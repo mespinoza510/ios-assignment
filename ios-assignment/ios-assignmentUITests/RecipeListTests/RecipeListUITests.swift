@@ -20,9 +20,9 @@ final class RecipeListUITests: BaseUITest {
     func testFirstCellTitleIsDisplayed() throws {
         let firstCell = self.waitForCell(at: 0)
         
-        XCTAssertTrue(firstCell.recipeNameLabel.exists, "RecipeNameLabel does not exist in the first cell")
-        XCTAssertTrue(firstCell.cuisineLabel.exists, "CuisineLabel does not exist in the first cell")
-        XCTAssertTrue(firstCell.recipeDescriptionLabel.exists, "RecipeDescriptionLabel does not exist in the first cell")
+        self.assertElementExists(.recipeNameLabel, in: firstCell)
+        self.assertElementExists(.cuisineLabel, in: firstCell)
+        self.assertElementExists(.recipeDescriptionLabel, in: firstCell)
     }
     
     @MainActor
@@ -32,8 +32,7 @@ final class RecipeListUITests: BaseUITest {
         XCTAssertTrue(firstCell.waitForExistence(timeout: 1), "First cell did not appear in time.")
         
         self.swipeUpToLoadMoreButton(in: list)
-        
-        XCTAssertTrue(self.app.loadMoreButton.exists, "Load more recipes button does not exist")
+        self.assertElementExists(.loadMoreButton)
     }
     
     @MainActor
@@ -52,7 +51,7 @@ final class RecipeListUITests: BaseUITest {
         }
         
         // Assert last cell of list and ensure 'Load More' button does not exist
-        XCTAssertFalse(self.app.loadMoreButton.exists, "Load more button should not exist after loading the whole list")
-        XCTAssertEqual(lastRecipeCell.recipeNameLabel.label, "White Chocolate Crème Brûlée", "Expected last cell to be 'White Chocolate Crème Brûlée'")
+        XCTAssertFalse(self.app.element(for: .loadMoreButton).exists, "Load more button should not exist after loading the whole list")
+        XCTAssertEqual(lastRecipeCell.element(for: .recipeNameLabel).label, "White Chocolate Crème Brûlée", "Expected last cell to be 'White Chocolate Crème Brûlée'")
     }
 }

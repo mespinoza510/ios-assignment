@@ -8,36 +8,30 @@
 import XCTest
 
 
+enum AccessibilityIdentifers: String {
+    case recipeNameLabel
+    case cuisineLabel
+    case recipeDescriptionLabel
+    case loadMoreButton
+    case sourceButton
+    case youtubeButton
+    case recipeLargeImageRendered
+    
+    var description: String {
+        return self.rawValue
+    }
+}
+
+
 extension XCUIElement {
-    var recipeNameLabel: XCUIElement {
-        return self.staticTexts["recipeNameLabel"]
-    }
-    
-    var cuisineLabel: XCUIElement {
-        return self.staticTexts["cuisineLabel"]
-    }
-    
-    var recipeDescriptionLabel: XCUIElement {
-        return self.staticTexts["recipeDescriptionLabel"]
-    }
-    
-    var loadMoreButton: XCUIElement {
-        return self.buttons["loadMoreButton"]
-    }
-    
-    var sourceButton: XCUIElement {
-        return self.buttons["sourceButton"]
-    }
-    
-    var youtubeButton: XCUIElement {
-        return self.buttons["youtubeButton"]
-    }
-    
-    var recipeLargeImageRendered: XCUIElement {
-        return self.images["recipeLargeImageRendered"]
-    }
-    
-    var recipeLargeImagePlaceholder: XCUIElement {
-        return self.images["recipeLargeImagePlaceholder"]
+    func element(for identifier: AccessibilityIdentifers) -> XCUIElement {
+        switch identifier {
+        case .recipeNameLabel, .cuisineLabel, .recipeDescriptionLabel:
+            return self.staticTexts[identifier.description]
+            case .loadMoreButton, .sourceButton, .youtubeButton:
+            return self.buttons[identifier.description]
+        case .recipeLargeImageRendered:
+            return self.images[identifier.description]
+        }
     }
 }
