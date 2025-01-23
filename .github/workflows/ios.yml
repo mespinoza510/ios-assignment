@@ -25,15 +25,20 @@ jobs:
           echo "Navigating to ios-assignment/ios-assignment:"
           cd ios-assignment || exit 1
           ls -la
-
+          
       - name: Check if Xcode project exists
         run: |
+          echo "Current directory is: $(pwd)"
+          echo "Listing files in the current directory:"
+          ls -la
+
           echo "Checking for ios-assignment.xcodeproj in the current directory:"
           if [ -f "ios-assignment.xcodeproj" ]; then
             echo "Found ios-assignment.xcodeproj in the first ios-assignment folder"
           else
             echo "ios-assignment.xcodeproj does not exist in the first ios-assignment folder"
           fi
+          
           echo "Checking for ios-assignment/ios-assignment.xcodeproj in the second ios-assignment folder:"
           if [ -f "ios-assignment/ios-assignment.xcodeproj" ]; then
             echo "Found ios-assignment.xcodeproj in the second ios-assignment folder"
