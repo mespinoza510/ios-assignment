@@ -24,7 +24,6 @@ jobs:
           echo "Current directory is: $(pwd)"
           echo "Listing files in the current directory:"
           ls -la
-          echo "Navigating to ios-assignment directory:"
           
       - name: Set Default Scheme
         working-directory: ios-assignment/ios-assignment
