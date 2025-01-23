@@ -24,7 +24,7 @@ jobs:
           ls -la
 
           # go into xcodeProj file
-          cd ios-assigment.xcodeproj
+          cd ios-assignment.xcodeproj
           
       - name: Check if Xcode project exists
         run: |
