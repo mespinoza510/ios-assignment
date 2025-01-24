@@ -25,9 +25,9 @@ jobs:
           echo "Installing iOS 18.2 Simulator..."
           sudo xcode-select --switch /Applications/Xcode_16.2.app/Contents/Developer
           sudo xcodebuild -runFirstLaunch
-
-          # Ensure iOS 18.2 platform is installed
-          xcodebuild -install-sdk
+          
+          # Download specific platform (iOS 18.2)
+          sudo xcodebuild -downloadPlatform iOS
 
       - name: Debug Available Simulators
         run: |
