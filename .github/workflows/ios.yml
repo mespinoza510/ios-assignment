@@ -72,12 +72,6 @@ jobs:
           echo "Listing project files:"
           ls -A
 
-      - name: Install iOS Simulator SDK
-        run: |
-          echo "Installing iOS 18.2 Simulator..."
-          sudo xcode-select --switch /Applications/Xcode_16.2.app/Contents/Developer
-          xcodebuild -runFirstLaunch
-
       - name: Build
         working-directory: ios-assignment
         env:
@@ -102,10 +96,10 @@ jobs:
             exit 1
           fi
 
-          echo "Building with simulator: iPhone 16 Pro Simulator (18.2)"
+          echo "Building with simulator: iPhone 16 Simulator (18.0)"
 
-          # Specify iPhone 16 with OS 18.2 as the simulator
-          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=iPhone 16 Pro,OS=18.2"
+          # Specify iPhone 16 with OS 18.0 as the simulator
+          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=iPhone 16,OS=18.0"
 
 
 
