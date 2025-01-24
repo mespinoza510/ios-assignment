@@ -106,12 +106,16 @@ jobs:
             exit 1
           fi
 
-          # Debug: List available devices with OS 18.2
+          # Debug: List all available devices and OS versions
+          echo "Listing all available iOS devices:"
+          xcrun simctl list devices
+
+          # Debug: List available devices with OS 18.2 (checking for correct output format)
           echo "Available iOS devices with OS 18.2:"
           xcrun simctl list devices | grep "18.2"
 
           # Dynamically find the simulator ID for iPhone 16 (18.2)
-          SIMULATOR_ID=$(xcrun simctl list devices | grep "iPhone 16.*18.2" | cut -d'(' -f2 | cut -d')' -f1)
+          SIMULATOR_ID=$(xcrun simctl list devices | grep "iPhone 16" | grep "18.2" | cut -d'(' -f2 | cut -d')' -f1)
 
           # Debug: Print the simulator ID
           if [[ -z "$SIMULATOR_ID" ]]; then
@@ -124,7 +128,6 @@ jobs:
 
           # Run xcodebuild using the dynamically fetched simulator ID
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=$SIMULATOR_ID,OS=18.2"
-
 
       - name: Test
         env:
