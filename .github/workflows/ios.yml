@@ -65,13 +65,18 @@ jobs:
           ls -A | grep -i "\\.xcworkspace$" && echo "Found workspace" || echo "No workspace found"
           ls -A | grep -i "\\.xcodeproj$" && echo "Found project" || echo "No project found"
 
+      - name: Debug Project Files
+        run: |
+          echo "Listing project files:"
+          ls -A
+
       - name: Build
         env:
           platform: iOS Simulator
         run: |
           scheme=$(cat $GITHUB_WORKSPACE/default)
 
-          if [[ -z "$GITHUB_WORKSPACE/default" ]]; then
+          if [[ -z "$scheme" ]]; then
             echo "Error: Scheme is empty!"
             exit 1
           fi
@@ -95,9 +100,9 @@ jobs:
         env:
           platform: iOS Simulator
         run: |
-          scheme=$(cat default)
+          scheme=$(cat $GITHUB_WORKSPACE/default)
 
-          if [[ -z "$$GITHUB_WORKSPACE/default" ]]; then
+          if [[ -z "$scheme" ]]; then
             echo "Error: Scheme is empty!"
             exit 1
           fi
