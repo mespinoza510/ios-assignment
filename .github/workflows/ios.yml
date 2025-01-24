@@ -105,12 +105,19 @@ jobs:
             exit 1
           fi
 
-          echo "Building with simulator: iPhone 16 Simulator (18.2)"
+          # Dynamically find the simulator ID for iPhone 16 (18.2)
+          SIMULATOR_ID=$(xcrun simctl list devices | grep "iPhone 16.*18.2" | cut -d'(' -f2 | cut -d')' -f1)
 
-          # Specify iPhone 16 Pro Simulator (18.2) (287105D9-CCE4-4F06-ABCB-3AA3487ADC9E) as the simulator
-          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=F107EE21-92B7-458B-95DD-FFBB90887D72,OS=18.2"
+          if [[ -z "$SIMULATOR_ID" ]]; then
+            echo "Error: No matching iPhone 16 simulator with OS 18.2 found!"
+            exit 1
+          fi
 
+          echo "Using simulator ID: $SIMULATOR_ID"
+          echo "Building with simulator: iPhone 16 Pro Simulator (18.2)"
 
+          # Run xcodebuild using the dynamically fetched simulator ID
+          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=$SIMULATOR_ID,OS=18.2"
 
       - name: Test
         env:
