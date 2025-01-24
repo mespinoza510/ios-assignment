@@ -34,9 +34,10 @@ jobs:
           echo "Available iOS Simulators:"
           xcrun xctrace list devices 2>&1 | grep -E 'iPhone.*\([0-9.]+.*\)'
 
-      - name: Select an Available Simulator
+      - name: Select iPhone 16 Pro Simulator (18.2)
         run: |
-          device=$(xcrun xctrace list devices 2>&1 | grep -E 'iPhone.*\([0-9.]+.*\)' | head -1 | sed -E 's/ *\([^)]*\)//g')
+          # Explicitly select the iPhone 16 Pro Simulator with OS 18.2
+          device=$(xcrun xctrace list devices 2>&1 | grep "iPhone 16 Pro.*18.2" | head -1 | sed -E 's/ *\([^)]*\)//g')
           if [[ -z "$device" ]]; then
             echo "Error: No available iPhone simulators found!"
             exit 1
