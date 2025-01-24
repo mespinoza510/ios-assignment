@@ -39,22 +39,38 @@ jobs:
         working-directory: ios-assignment
         run: |
           scheme_list=$(xcodebuild -list -json | tr -d "\n")
-          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
-          
+          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]" || echo "")
+
           if [[ -z "$default" ]]; then
-            echo "Error: Could not determine default scheme!"
+            echo "Error: No default scheme found!"
             exit 1
           fi
 
           echo $default > default
           echo "Using default scheme: $default"
-          echo "SCHEME=$default" >> $GITHUB_ENV  # Store scheme as GitHub Actions variable
+
+      - name: Debug Scheme
+        run: |
+          echo "Checking scheme value..."
+          if [[ -z "$scheme" ]]; then
+            echo "Error: Scheme is empty!"
+            exit 1
+          fi
+          echo "Using scheme: $scheme"
+
+      - name: Debug Xcode Project
+        run: |
+          echo "Checking for .xcworkspace or .xcodeproj..."
+          ls -A | grep -i "\\.xcworkspace$" && echo "Found workspace" || echo "No workspace found"
+          ls -A | grep -i "\\.xcodeproj$" && echo "Found project" || echo "No project found"
 
       - name: Build
         env:
-          scheme: ${{ env.SCHEME }}
+          scheme: ${{ 'default' }}
           platform: iOS Simulator
         run: |
+          scheme=$(cat default || echo "")
+
           if [[ -z "$scheme" ]]; then
             echo "Error: Scheme is empty!"
             exit 1
@@ -64,12 +80,10 @@ jobs:
           if [[ -n "$(ls -A | grep -i \\.xcworkspace\$)" ]]; then
             filetype_parameter="workspace"
             file_to_build="$(ls -A | grep -i \\.xcworkspace\$)"
-          else
+          elif [[ -n "$(ls -A | grep -i \\.xcodeproj\$)" ]]; then
             filetype_parameter="project"
             file_to_build="$(ls -A | grep -i \\.xcodeproj\$)"
-          fi
-
-          if [[ -z "$file_to_build" ]]; then
+          else
             echo "Error: No .xcworkspace or .xcodeproj found!"
             exit 1
           fi
@@ -79,9 +93,11 @@ jobs:
 
       - name: Test
         env:
-          scheme: ${{ env.SCHEME }}
+          scheme: ${{ 'default' }}
           platform: iOS Simulator
         run: |
+          scheme=$(cat default || echo "")
+
           if [[ -z "$scheme" ]]; then
             echo "Error: Scheme is empty!"
             exit 1
@@ -91,12 +107,10 @@ jobs:
           if [[ -n "$(ls -A | grep -i \\.xcworkspace\$)" ]]; then
             filetype_parameter="workspace"
             file_to_build="$(ls -A | grep -i \\.xcworkspace\$)"
-          else
+          elif [[ -n "$(ls -A | grep -i \\.xcodeproj\$)" ]]; then
             filetype_parameter="project"
             file_to_build="$(ls -A | grep -i \\.xcodeproj\$)"
-          fi
-
-          if [[ -z "$file_to_build" ]]; then
+          else
             echo "Error: No .xcworkspace or .xcodeproj found!"
             exit 1
           fi
