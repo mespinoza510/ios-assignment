@@ -99,7 +99,7 @@ jobs:
           echo "Building with simulator: iPhone 16 Simulator (18.2)"
 
           # Specify iPhone 16 Pro Simulator (18.2) (287105D9-CCE4-4F06-ABCB-3AA3487ADC9E) as the simulator
-          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=287105D9-CCE4-4F06-ABCB-3AA3487ADC9E,name=iPhone 16 Pro,OS=18.2"
+          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=287105D9-CCE4-4F06-ABCB-3AA3487ADC9E,OS=18.2"
 
 
 
