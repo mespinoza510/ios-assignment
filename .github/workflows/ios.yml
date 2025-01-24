@@ -96,10 +96,10 @@ jobs:
             exit 1
           fi
 
-          echo "Building with simulator: iPhone 16 Simulator (18.2)"
+          echo "Building with simulator: iPhone 16 Pro Simulator (18.2)"
 
           # Specify iPhone 16 with OS 18.2 as the simulator
-          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=iPhone 16,OS=18.2"
+          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=iPhone 16 Pro,OS=18.2"
 
 
       - name: Test
