@@ -46,13 +46,13 @@ jobs:
             exit 1
           fi
 
-          echo $default > default
+          echo $default > $GITHUB_WORKSPACE/default
           echo "Using default scheme: $default"
 
       - name: Debug Scheme
         run: |
           echo "Checking scheme value..."
-          scheme=$(cat default)
+          scheme=$(cat $GITHUB_WORKSPACE/default)
           if [[ -z "$scheme" ]]; then
             echo "Error: Scheme is empty!"
             exit 1
