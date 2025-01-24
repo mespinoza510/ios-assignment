@@ -60,17 +60,20 @@ jobs:
           echo "Using scheme: $scheme"
 
       - name: Debug Xcode Project
+        working-directory: ios-assignment
         run: |
           echo "Checking for .xcworkspace or .xcodeproj..."
           ls -A | grep -i "\\.xcworkspace$" && echo "Found workspace" || echo "No workspace found"
           ls -A | grep -i "\\.xcodeproj$" && echo "Found project" || echo "No project found"
 
       - name: Debug Project Files
+        working-directory: ios-assignment
         run: |
           echo "Listing project files:"
           ls -A
 
       - name: Build
+        working-directory: ios-assignment
         env:
           platform: iOS Simulator
         run: |
