@@ -69,9 +69,9 @@ jobs:
         env:
           platform: iOS Simulator
         run: |
-          scheme=$(cat default)
+          scheme=$(cat $GITHUB_WORKSPACE/default)
 
-          if [[ -z "$scheme" ]]; then
+          if [[ -z "$GITHUB_WORKSPACE/default" ]]; then
             echo "Error: Scheme is empty!"
             exit 1
           fi
@@ -97,7 +97,7 @@ jobs:
         run: |
           scheme=$(cat default)
 
-          if [[ -z "$scheme" ]]; then
+          if [[ -z "$$GITHUB_WORKSPACE/default" ]]; then
             echo "Error: Scheme is empty!"
             exit 1
           fi
