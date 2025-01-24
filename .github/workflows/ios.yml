@@ -52,6 +52,7 @@ jobs:
       - name: Debug Scheme
         run: |
           echo "Checking scheme value..."
+          scheme=$(cat default)
           if [[ -z "$scheme" ]]; then
             echo "Error: Scheme is empty!"
             exit 1
@@ -66,10 +67,9 @@ jobs:
 
       - name: Build
         env:
-          scheme: ${{ 'default' }}
           platform: iOS Simulator
         run: |
-          scheme=$(cat default || echo "")
+          scheme=$(cat default)
 
           if [[ -z "$scheme" ]]; then
             echo "Error: Scheme is empty!"
@@ -93,10 +93,9 @@ jobs:
 
       - name: Test
         env:
-          scheme: ${{ 'default' }}
           platform: iOS Simulator
         run: |
-          scheme=$(cat default || echo "")
+          scheme=$(cat default)
 
           if [[ -z "$scheme" ]]; then
             echo "Error: Scheme is empty!"
