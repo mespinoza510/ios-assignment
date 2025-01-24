@@ -27,7 +27,7 @@ jobs:
 
       - name: Select an Available Simulator
         run: |
-          device=$(xcrun xctrace list devices 2>&1 | grep -E 'iPhone.*\([0-9.]+.*\)' | head -1 | awk -F' (' '{print $1}')
+          device=$(xcrun xctrace list devices 2>&1 | grep -E 'iPhone.*\([0-9.]+.*\)' | head -1 | sed -E 's/ *\([^)]*\)//g')
           if [[ -z "$device" ]]; then
             echo "Error: No available iPhone simulators found!"
             exit 1
