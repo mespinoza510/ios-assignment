@@ -84,14 +84,14 @@ jobs:
 
       - name: Boot all available iPhone simulators
         run: |
-          echo "Booting all available iPhone simulators..."
+          echo "Booting all available iPhone 16 simulators..."
       
-          # List all available iPhone simulators that are in 'Shutdown' state
-          xcrun simctl list devices | grep -E 'iPhone' | grep 'Shutdown' | sed 's/^[ \t]*//;s/[ \t]*$//' | while read simulator; do
+          # List all available iPhone 16 simulators that are in 'Shutdown' state
+          xcrun simctl list devices | grep -E 'iPhone 16' | grep '18.2' | grep 'Shutdown' | sed 's/^[ \t]*//;s/[ \t]*$//' | while read simulator; do
             echo "Booting simulator: $simulator"
       
             # Get the device ID (UUID) for the simulator
-            device_id=$(xcrun simctl list devices | grep "$simulator" | grep 'Shutdown' | awk -F '[()]' '{print $2}')
+            device_id=$(xcrun simctl list devices | grep "$simulator" | grep 'Shutdown' | sed -E 's/.*\(([^)]+)\)/\1/')
       
             # Check if device_id is empty or invalid
             if [[ -z "$device_id" ]]; then
