@@ -82,10 +82,17 @@ jobs:
           echo "Listing project files:"
           ls -A
 
-      - name: List all iOS 18.2 iPhone devices
+      - name: List all available iPhone simulators with OS 18.2
         run: |
-          echo "Listing all iPhone/iPad devices with OS 18.2:"
-          xcrun simctl list devices | grep -E 'iPhone' | grep '18.2'
+          echo "Listing all available iPhone simulators with OS 18.2..."
+          available_devices=$(xcrun simctl list devices | grep -E 'iPhone' | grep '18.2')
+
+          if [[ -z "$available_devices" ]]; then
+            echo "Error: No iPhone simulators found with OS 18.2!"
+            exit 1
+          fi
+          
+          echo "$available_devices"
 
       - name: Boot available iOS simulators
         run: |
