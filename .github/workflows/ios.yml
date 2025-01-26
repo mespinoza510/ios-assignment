@@ -106,16 +106,12 @@ jobs:
             exit 1
           fi
 
-          # Debug: List all available devices and OS versions
-          echo "Listing all available iOS devices:"
-          xcrun simctl list devices
+          # Debug: List available iOS devices with OS 18.2 and exclude non-iOS devices like TV and Watch
+          echo "Listing all available iOS 18.2 devices:"
+          xcrun simctl list devices | grep -E 'iPhone.*18.2' | grep -v -E 'Apple TV|Apple Watch'
 
-          # Debug: List available devices with OS 18.2
-          echo "Available iOS devices with OS 18.2:"
-          xcrun simctl list devices | grep "iPhone 16.*18.2"
-
-          # Dynamically find the simulator ID for iPhone 16 (18.2) that is shutdown
-          SIMULATOR_ID=$(xcrun simctl list devices | grep -E "iPhone 16.*18.2" | grep "(Shutdown)" | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
+          # Dynamically find the simulator ID for an available iPhone 16 (18.2) that is Booted or Shutdown
+          SIMULATOR_ID=$(xcrun simctl list devices | grep -E 'iPhone 16.*18.2' | grep -E '(Booted|Shutdown)' | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
 
           # Debug: Print the simulator ID
           if [[ -z "$SIMULATOR_ID" ]]; then
@@ -124,14 +120,14 @@ jobs:
           fi
 
           echo "Using simulator ID: $SIMULATOR_ID"
-          echo "Starting the simulator..."
 
-          # Boot the simulator if it is shutdown
-          xcrun simctl boot "$SIMULATOR_ID"
-
-          # Wait for the simulator to be ready (may take a few seconds)
-          echo "Waiting for the simulator to boot up..."
-          sleep 15
+          # If the device is Shutdown, boot it
+          SIMULATOR_STATE=$(xcrun simctl list devices | grep "$SIMULATOR_ID" | sed 's/.*(\(.*\)).*/\1/')
+          if [[ "$SIMULATOR_STATE" == "Shutdown" ]]; then
+            echo "Simulator is in Shutdown state. Attempting to boot the simulator..."
+            xcrun simctl boot "$SIMULATOR_ID"
+            sleep 15  # Allow time for the simulator to boot
+          fi
 
           # Ensure simulator is booted
           SIMULATOR_STATE=$(xcrun simctl list devices | grep "$SIMULATOR_ID" | sed 's/.*(\(.*\)).*/\1/')
