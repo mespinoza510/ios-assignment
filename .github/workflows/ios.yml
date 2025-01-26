@@ -87,7 +87,7 @@ jobs:
           echo "Booting iPhone 16 simulators with OS 18.2..."
         
           # List all available iPhone 16 simulators with iOS 18.2 that are in 'Shutdown' state
-          xcrun simctl list devices | grep -E 'iPhone 16 Pro' | grep '18.2' | grep 'Shutdown' | sed 's/^[ \t]*//;s/[ \t]*$//' | while read simulator; do
+          xcrun simctl list devices | grep -E 'iPhone' | grep '18.2' | grep 'Shutdown' | sed 's/^[ \t]*//;s/[ \t]*$//' | while read simulator; do
             echo "Booting simulator: $simulator"
         
             # Extract the device ID (UUID) for iPhone 16 simulators
