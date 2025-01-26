@@ -74,7 +74,7 @@ jobs:
         run: |
           echo "Checking for .xcworkspace or .xcodeproj..."
           ls -A | grep -i "\\.xcworkspace$" && echo "Found workspace" || echo "No workspace found"
-          ls -A | grep -i "\\.xcodeproj$" && echo "Found project" || echo "No project found"
+          ls -A | grep -i "\\.xcodeproj$" && echo "Successfully found project" || echo "No project found"
 
       - name: Debug Project Files
         working-directory: ios-assignment
@@ -91,7 +91,10 @@ jobs:
             echo "Booting simulator: $simulator"
       
             # Extract the device ID (UUID) from the output
-            device_id=$(xcrun simctl list devices | grep "$simulator" | grep 'Shutdown' | sed -E 's/.*\(([^)]+)\)/\1/')
+            # device_id=$(xcrun simctl list devices | grep "$simulator" | grep 'Shutdown' | sed -E 's/.*\(([^)]+)\)/\1/')
+
+            #testing device id with 
+            device_id=$(echo "$simulator" | sed -E 's/.*\(([A-F0-9\-]+)\).*/\1/')
             echo "Extracting device id: $device_id"
       
             # Check if device_id is empty or invalid
