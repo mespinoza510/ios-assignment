@@ -110,12 +110,12 @@ jobs:
           echo "Listing all available iOS devices:"
           xcrun simctl list devices
 
-          # Debug: List available devices with OS 18.2 (checking for correct output format)
+          # Debug: List available devices with OS 18.2
           echo "Available iOS devices with OS 18.2:"
-          xcrun simctl list devices | grep "18.2"
+          xcrun simctl list devices | grep "iPhone 16.*18.2"
 
-          # Dynamically find the simulator ID for iPhone 16 (18.2)
-          SIMULATOR_ID=$(xcrun simctl list devices | grep "iPhone 16" | grep "18.2" | cut -d'(' -f2 | cut -d')' -f1)
+          # Dynamically find the simulator ID for iPhone 16 (18.2) that is NOT shutdown
+          SIMULATOR_ID=$(xcrun simctl list devices | grep "iPhone 16" | grep "18.2" | grep -v "(Shutdown)" | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/')
 
           # Debug: Print the simulator ID
           if [[ -z "$SIMULATOR_ID" ]]; then
