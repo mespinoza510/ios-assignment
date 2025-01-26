@@ -91,8 +91,8 @@ jobs:
             echo "Booting simulator: $simulator"
         
             # Extract the device ID (UUID) for iPhone 16 simulators
-            device_id=$(xcrun simctl list devices | grep "$simulator" | grep 'Shutdown' | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
-            echo "device id: $device_id"
+            device_id=$(echo "$simulator" | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/')
+            echo "Extracted device id: $device_id"
         
             # Check if device_id is empty or invalid
             if [[ -z "$device_id" ]]; then
