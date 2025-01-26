@@ -82,6 +82,20 @@ jobs:
           echo "Listing project files:"
           ls -A
 
+      - name: List all iOS 18.2 iPhone devices
+        run: |
+          echo "Listing all iPhone/iPad devices with OS 18.2:"
+          xcrun simctl list devices | grep -E 'iPhone' | grep '18.2'
+
+      - name: Boot available iOS simulators
+        run: |
+          echo "Attempting to boot all shutdown simulators..."
+          xcrun simctl list devices | grep 'Shutdown' | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | while read simulator_id; do
+            echo "Booting simulator: $simulator_id"
+            xcrun simctl boot $simulator_id
+            sleep 5  # Allow time for the simulator to boot
+          done
+
       - name: Build
         working-directory: ios-assignment
         env:
