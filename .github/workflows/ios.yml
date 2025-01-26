@@ -126,17 +126,23 @@ jobs:
           echo "Using simulator ID: $SIMULATOR_ID"
           echo "Starting the simulator..."
 
-          # Start the simulator (if it is shutdown)
+          # Boot the simulator if it is shutdown
           xcrun simctl boot "$SIMULATOR_ID"
 
           # Wait for the simulator to be ready (may take a few seconds)
           echo "Waiting for the simulator to boot up..."
-          sleep 10
+          sleep 15
+
+          # Ensure simulator is booted
+          SIMULATOR_STATE=$(xcrun simctl list devices | grep "$SIMULATOR_ID" | sed 's/.*(\(.*\)).*/\1/')
+          if [[ "$SIMULATOR_STATE" != "Booted" ]]; then
+            echo "Error: Simulator failed to boot up properly!"
+            exit 1
+          fi
 
           # Run xcodebuild using the dynamically fetched simulator ID
           echo "Building with simulator: iPhone 16 Pro Simulator (18.2)"
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=$SIMULATOR_ID,OS=18.2"
-
 
       - name: Test
         env:
