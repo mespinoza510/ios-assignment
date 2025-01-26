@@ -114,8 +114,8 @@ jobs:
           echo "Available iOS devices with OS 18.2:"
           xcrun simctl list devices | grep "iPhone 16.*18.2"
 
-          # Dynamically find the simulator ID for iPhone 16 (18.2) that is NOT shutdown
-          SIMULATOR_ID=$(xcrun simctl list devices | grep -E "iPhone 16.*18.2" | grep -v "(Shutdown)" | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
+          # Dynamically find the simulator ID for iPhone 16 (18.2) that is shutdown
+          SIMULATOR_ID=$(xcrun simctl list devices | grep -E "iPhone 16.*18.2" | grep "(Shutdown)" | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
 
           # Debug: Print the simulator ID
           if [[ -z "$SIMULATOR_ID" ]]; then
@@ -124,10 +124,19 @@ jobs:
           fi
 
           echo "Using simulator ID: $SIMULATOR_ID"
-          echo "Building with simulator: iPhone 16 Pro Simulator (18.2)"
+          echo "Starting the simulator..."
+
+          # Start the simulator (if it is shutdown)
+          xcrun simctl boot "$SIMULATOR_ID"
+
+          # Wait for the simulator to be ready (may take a few seconds)
+          echo "Waiting for the simulator to boot up..."
+          sleep 10
 
           # Run xcodebuild using the dynamically fetched simulator ID
+          echo "Building with simulator: iPhone 16 Pro Simulator (18.2)"
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=$SIMULATOR_ID,OS=18.2"
+
 
       - name: Test
         env:
