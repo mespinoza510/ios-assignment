@@ -84,10 +84,18 @@ jobs:
 
       - name: Boot all available iPhone simulators
         run: |
-          echo "Booting all available iPhone simulators..."
-          
-          # List all available iPhone simulators that are in 'Shutdown' state
-          xcrun simctl list devices | grep -E 'iPhone 16' | grep 'Shutdown' | sed 's/^[ \t]*//;s/[ \t]*$//' | while read simulator; do
+            echo "Booting the first available iPhone 16 simulator with OS 18.2..."
+            
+            # List all available iPhone simulators that are in 'Shutdown' state
+            simulator=$(xcrun simctl list devices | grep -E 'iPhone 16' | grep 'Shutdown' | head -n 1)
+              echo "Processing simulator: $simulator"
+
+            # If no simulator is found, print an error and exit
+            if [[ -z "$simulator" ]]; then
+              echo "Error: No available iPhone 16 simulators in 'Shutdown' state!"
+              exit 1
+            fi
+
             echo "Processing simulator: $simulator"
             
             # Extract the device ID (UUID) for the simulator
@@ -105,30 +113,21 @@ jobs:
             # Attempt to boot the simulator
             echo "Attempting to boot simulator with ID: $device_id"
             
-            # Retry mechanism if booting fails
-            MAX_RETRIES=3
-            RETRY_COUNT=0
-            while [[ $RETRY_COUNT -lt $MAX_RETRIES ]]; do
-              xcrun simctl boot "$device_id" || echo "Failed to boot simulator with ID: $device_id"
-              
-              # Check if the booting was successful
-              boot_status=$(xcrun simctl list devices | grep "$device_id" | grep 'Booted')
-              if [[ -n "$boot_status" ]]; then
-                echo "Simulator $simulator successfully booted."
+            # Wait for the simulator to be fully booted
+            echo "Waiting for simulator to be fully booted..."
+            while true; do
+              boot_status=$(xcrun simctl list devices | grep "$device_id" | grep -o 'Booted')
+              if [[ "$boot_status" == "Booted" ]]; then
+                echo "Simulator $simulator is fully booted."
                 break
               else
                 echo "Simulator $simulator is still booting... Retrying..."
-                RETRY_COUNT=$((RETRY_COUNT+1))
                 sleep 10
               fi
             done
-            
-            # If after retries the simulator still didn't boot, log the error and move to the next one
-            if [[ $RETRY_COUNT -eq $MAX_RETRIES ]]; then
-              echo "Error: Simulator $simulator failed to boot after $MAX_RETRIES attempts."
-              continue
-            fi
-          done
+
+            # Once booted, proceed to the next step
+            echo "Simulator $simulator is successfully booted. Proceeding with the next step..."
           
       - name: List all available iPhone simulators with OS 18.2
         run: |
