@@ -152,7 +152,7 @@ jobs:
           xcrun simctl list devices
           
           # Now filter for iPhone simulators with OS 18.2
-          available_devices=$(xcrun simctl list devices | grep -E 'iPhone Pro' | grep '18.2')
+          available_devices=$(xcrun simctl list devices | grep -E '\biPhone Pro\b')
           
           if [[ -z "$available_devices" ]]; then
             echo "Error: No iPhone simulators found with iOS 18.2. falling back to 18.1"
