@@ -248,10 +248,17 @@ jobs:
             echo "Error: No .xcworkspace or .xcodeproj found!"
             exit 1
           fi
-
+          
           if [[ -z $SIMULATOR_ID ]]; then
-            echo "Error: No Simulator ID found!"
-            exit 1
+            echo "No SIMULATOR_ID found. Attempting to fetch available devices..."
+
+            available_devices=$(xcrun simctl list devices | grep 'iPhone 16' | grep '(Booted)')
+            SIMULATOR_ID=$(echo "$available_devices" | sed -E 's/.*\(([A-Za-z0-9\-]+-[A-Za-z0-9\-]+)\).*/\1/')
+
+            if [[ -z $SIMULATOR_ID ]]; then
+              echo "Error: No Simulator ID found!"
+              exit 1
+            fi
           fi
 
           echo "Testing with simulator id: $SIMULATOR_ID"
