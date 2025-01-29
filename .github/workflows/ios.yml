@@ -262,4 +262,4 @@ jobs:
           fi
 
           echo "Testing with simulator id: $SIMULATOR_ID"
-          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,id=$SIMULATOR_ID"
+          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,id=$SIMULATOR_ID,OS=18.2"
