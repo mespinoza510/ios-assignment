@@ -226,6 +226,7 @@ jobs:
           xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=$SIMULATOR_ID,OS=18.2"
 
       - name: Test
+        working-directory: ios-assignment
         env:
           platform: iOS Simulator
         run: |
@@ -248,5 +249,10 @@ jobs:
             exit 1
           fi
 
-          echo "Testing with simulator: $SIMULATOR_DEVICE"
-          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,name=$SIMULATOR_DEVICE"
+          if [[ -z $SIMULATOR_ID ]]; then
+            echo "Error: No Simulator ID found!"
+            exit 1
+          fi
+
+          echo "Testing with simulator id: $SIMULATOR_ID"
+          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,id=$SIMULATOR_ID"
