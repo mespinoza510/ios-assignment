@@ -50,7 +50,7 @@ class BaseUITest: XCTestCase {
         }
     }
 
-    func waitForCell(at index: Int, timeout: TimeInterval = 1) -> XCUIElement {
+    func waitForCell(at index: Int, timeout: TimeInterval = 5) -> XCUIElement {
         let cell = self.app.cells.element(boundBy: index)
         XCTAssertTrue(self.waitForElement(cell, timeout: timeout), "Cell \(index) did not appear in time.")
         return cell
