@@ -24,7 +24,7 @@ class RecipeDetailViewUITests: BaseUITest {
     @MainActor
     func testRecipeDetailViewSourceButtonTappedAssertWebpage() {
         self.tapCell(at: 0)
-        self.app.sourceButton.tap()
+        self.app.element(for: .sourceButton).tap()
         
         sleep(5) // in-app webpage to load
         
@@ -34,7 +34,7 @@ class RecipeDetailViewUITests: BaseUITest {
     @MainActor
     func testRecipeDetailViewYoutubeButtonTappedAssertWebpage() {
         self.tapCell(at: 0)
-        self.app.youtubeButton.tap()
+        self.app.element(for: .youtubeButton).tap()
         
         sleep(5)
         
