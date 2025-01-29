@@ -193,7 +193,7 @@ jobs:
           echo "Available devices: $available_devices"
 
           # Dynamically find the simulator ID for an available iPhone 16 (18.2) that is Booted
-          SIMULATOR_ID=$(xcrun simctl list devices | grep -E 'iPhone 16' | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
+          SIMULATOR_ID=$(echo "$available_devices" sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
 
           echo "Found available simulator with id: $SIMULATOR_ID"
 
