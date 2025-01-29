@@ -147,12 +147,8 @@ jobs:
         run: |
           echo "Listing all available iPhone simulators with OS 18.2..."
           
-          # Show raw output for debugging purposes
-          # echo "Raw output of xcrun simctl list devices:"
-          # xcrun simctl list devices
-          
           # Now filter for iPhone simulators with OS 18.2
-          available_devices=$(xcrun simctl list devices | grep -E 'iPhone')
+          available_devices=$(xcrun simctl list devices | grep -E 'iPhone' | grep -E '(Booted)')
           echo "Availabel devices found: $available_devices"
           
           if [[ -z "$available_devices" ]]; then
@@ -195,8 +191,10 @@ jobs:
           echo "Listing all available iOS 18.2 devices:"
           xcrun simctl list devices
 
-          # Dynamically find the simulator ID for an available iPhone 16 (18.2) that is Booted or Shutdown
-          SIMULATOR_ID=$(xcrun simctl list devices | grep -E 'iPhone 16.*18.2' | grep -E '(Booted|Shutdown)' | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
+          # Dynamically find the simulator ID for an available iPhone 16 (18.2) that is Booted
+          SIMULATOR_ID=$(xcrun simctl list devices | grep -E 'iPhone 16' | grep -E '(Booted)' | sed -E 's/.*\(([A-Za-z0-9\-]+)\).*/\1/' | head -n 1)
+
+          echo "Found available simulator with id: $SIMULATOR_ID"
 
           # Debug: Print the simulator ID
           if [[ -z "$SIMULATOR_ID" ]]; then
