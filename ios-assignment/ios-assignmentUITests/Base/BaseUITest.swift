@@ -56,6 +56,16 @@ class BaseUITest: XCTestCase {
         return cell
     }
     
+    func waitForElementToAppear(element: XCUIElement, timeout: TimeInterval = 5) {
+        let existPredicate = NSPredicate(format: "exists == true")
+        
+        let _ = self.expectation(for: existPredicate, evaluatedWith: element)
+        
+        self.waitForExpectations(timeout: timeout)
+        
+        XCTAssertTrue(element.exists, "Element not found after waiting for \(timeout) seconds.")
+    }
+    
     func tapCell(at index: Int) {
         let cell = self.app.cells.element(boundBy: index)
         cell.tap()
@@ -73,9 +83,18 @@ class BaseUITest: XCTestCase {
         button.tap()
     }
     
+    // MARK: - Assert methods
     func assertElementExists(_ identifier: AccessibilityIdentifers, in parent: XCUIElement? = nil) {
         let element = parent?.element(for: identifier) ?? self.app.element(for: identifier)
         XCTAssertTrue(element.exists, "Could not find \(identifier.rawValue) in the specified parent element.")
+    }
+    
+    func assertWebElementExists(for element: XCUIElement, _ identifier: String, expectedValue: String) {
+        let valueOfElementWithIdentifier = self.getValueDescription(from: element, with: identifier)
+        
+        // Assert that the element exists and has the expected value
+        XCTAssert(element.exists, "Could not find \(identifier) in the specified element.")
+        XCTAssert(valueOfElementWithIdentifier.contains(expectedValue), "\(identifier) does not contain the expected value.")
     }
     
     // MARK: - Helper Methods
@@ -98,6 +117,16 @@ class BaseUITest: XCTestCase {
     private func getLabelDescription(from cell: XCUIElement, with identifier: String) -> String {
         let element = cell.descendants(matching: .staticText).matching(identifier: identifier).firstMatch
         return element.label
+    }
+    
+    /// goes down view hierarchy to get descendants that have meaniningful elements
+    private func getValueDescription(from element: XCUIElement, with identifier: String) -> String {
+        // Get the first button with the given identifier and retrieve its value
+        guard let value = element.descendants(matching: .any).matching(identifier: identifier).firstMatch.value as? String else {
+            XCTFail("The element with the identifier '\(identifier)' does not have a value.")
+            return ""
+        }
+        return value // Return an empty string if no value is found
     }
 }
 

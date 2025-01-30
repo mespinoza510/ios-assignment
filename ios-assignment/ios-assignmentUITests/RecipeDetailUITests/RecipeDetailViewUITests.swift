@@ -26,18 +26,29 @@ class RecipeDetailViewUITests: BaseUITest {
         self.tapCell(at: 0)
         self.app.element(for: .sourceButton).tap()
         
-        sleep(5) // in-app webpage to load
-        
-        XCTAssert(self.app.webViews.element.exists, "Web view not found")
+        self.waitForElementToAppear(element: self.app.webViews.element)
     }
     
     @MainActor
-    func testRecipeDetailViewYoutubeButtonTappedAssertWebpage() {
+    func testRecipeDetailViewSourceButtonTappedAssertWebpageButtons() {
+        self.tapCell(at: 0)
+        self.app.element(for: .sourceButton).tap()
+        
+        self.waitForElementToAppear(element: self.app.webViews.element)
+        
+        let addressButtonLabel = self.app.buttons["Address"]
+        self.waitForElementToAppear(element: addressButtonLabel)
+        
+        self.assertWebElementExists(for: addressButtonLabel, "URL", expectedValue: "nyonyacooking.com")
+    }
+    
+    @MainActor
+    func testRecipeDetailViewYoutubeButtonTappedAssertWebpageText() {
         self.tapCell(at: 0)
         self.app.element(for: .youtubeButton).tap()
         
-        sleep(5)
+        self.waitForElementToAppear(element: self.app.webViews.element)
         
-        XCTAssert(self.app.webViews.element.exists, "Web view not found")
+        XCTAssertEqual(self.app.buttons["TAP TO UNMUTE"].label, "TAP TO UNMUTE", "YouTube page is not loaded or 'TAP TO UNMUTE' button is not found")
     }
 }
