@@ -49,6 +49,9 @@ class RecipeDetailViewUITests: BaseUITest {
         
         self.waitForElementToAppear(element: self.app.webViews.element)
         
-        XCTAssertEqual(self.app.buttons["TAP TO UNMUTE"].label, "TAP TO UNMUTE", "YouTube page is not loaded or 'TAP TO UNMUTE' button is not found")
+        let tapToUnmuteButtonLabel = self.app.buttons["TAP TO UNMUTE"]
+        self.waitForElementToAppear(element: tapToUnmuteButtonLabel)
+        
+        XCTAssertEqual(tapToUnmuteButtonLabel.label, "TAP TO UNMUTE", "YouTube page is not loaded or 'TAP TO UNMUTE' button is not found")
     }
 }
