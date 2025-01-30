@@ -20,6 +20,10 @@ jobs:
         with:
           xcode-version: latest-stable
 
+      - name: Install XCPretty
+        run: |
+          sudo gem install xcpretty
+
       - name: Install iOS 18.2 Simulator
         run: |
           echo "Installing iOS 18.2 Simulator..."
@@ -223,7 +227,7 @@ jobs:
 
           # Run xcodebuild using the dynamically fetched simulator ID
           echo "Building with simulator: iPhone 16 Pro Simulator (18.2)"
-          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=$SIMULATOR_ID,OS=18.2"
+          xcodebuild build-for-testing -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=iOS Simulator,id=$SIMULATOR_ID,OS=18.2" | xcpretty
 
       - name: Test
         working-directory: ios-assignment
@@ -262,4 +266,4 @@ jobs:
           fi
 
           echo "Testing with simulator id: $SIMULATOR_ID"
-          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,id=$SIMULATOR_ID,OS=18.2"
+          xcodebuild test-without-building -scheme "$scheme" -"$filetype_parameter" "$file_to_build" -destination "platform=$platform,id=$SIMULATOR_ID,OS=18.2" | xcpretty
